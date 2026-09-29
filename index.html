@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y2K Cyber Profile - Web Developer</title>
+    <!-- Google Fonts: VT323 & Press Start 2P & Syne -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Syne:wght@400;700;800&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b021a;
+            --panel-bg: rgba(20, 5, 45, 0.85);
+            --border-neon: #00ffff;
+            --border-pink: #ff007f;
+            --text-main: #00ffcc;
+            --text-pink: #ff77ff;
+            --text-muted: #9b72cf;
+            --accent-yellow: #ffff00;
+            --scanline: rgba(0, 0, 0, 0.3);
+        }
+
+        .matrix-theme {
+            --bg-color: #000d00;
+            --panel-bg: rgba(0, 20, 0, 0.9);
+            --border-neon: #00ff00;
+            --border-pink: #00aa00;
+            --text-main: #00ff00;
+            --text-pink: #77ff77;
+            --text-muted: #008800;
+            --accent-yellow: #88ff00;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Syne', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            transition: background 0.3s ease;
+        }
+
+        /* CRT Scanlines Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header / Navbar Style Y2K */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: var(--panel-bg);
+            border: 2px solid var(--border-neon);
+            padding: 12px 20px;
+            box-shadow: 0 0 15px var(--border-neon);
+        }
+
+        .logo {
+            font-family: 'VT323', monospace;
+            font-size: 1.8rem;
+            color: var(--accent-yellow);
+            text-shadow: 2px 2px var(--border-pink);
+            letter-spacing: 2px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .retro-btn {
+            background: transparent;
+            border: 2px solid var(--border-pink);
+            color: var(--text-pink);
+            padding: 5px 12px;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 2px 2px var(--border-pink);
+        }
+
+        .retro-btn:hover {
+            background: var(--border-pink);
+            color: var(--bg-color);
+            box-shadow: none;
+            transform: translate(2px, 2px);
+        }
+
+        /* Bento Grid Layout */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+        }
+
+        .bento-box {
+            background: var(--panel-bg);
+            border: 2px solid var(--border-neon);
+            box-shadow: 4px 4px 0px var(--border-pink);
+            padding: 20px;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .bento-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 6px 6px 0px var(--border-neon);
+        }
+
+        /* Retro Window Frame Header */
+        .win-header {
+            background: linear-gradient(90deg, var(--border-neon), var(--border-pink));
+            color: #000;
+            padding: 4px 8px;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -20px -20px 15px -20px;
+        }
+
+        .win-buttons span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #000;
+            margin-left: 4px;
+            border: 1px solid #fff;
+            text-align: center;
+            font-size: 9px;
+            line-height: 10px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Specific Box Spans */
+        .box-hero { grid-column: span 8; }
+        .box-profile { grid-column: span 4; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .box-skills { grid-column: span 6; }
+        .box-status { grid-column: span 6; }
+        .box-projects { grid-column: span 7; }
+        .box-contact { grid-column: span 5; }
+
+        @media(max-width: 900px) {
+            .box-hero, .box-profile, .box-skills, .box-status, .box-projects, .box-contact {
+                grid-column: span 12 !important;
+            }
+        }
+
+        /* Hero Content */
+        .box-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-yellow);
+            text-shadow: 2px 2px var(--border-pink);
+            margin-bottom: 10px;
+        }
+
+        .box-hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .tag-y2k {
+            display: inline-block;
+            background: var(--border-pink);
+            color: #fff;
+            padding: 3px 8px;
+            font-size: 0.8rem;
+            font-family: 'VT323', monospace;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            border: 1px dashed var(--border-neon);
+        }
+
+        /* Profile Frame Box */
+        .avatar-frame {
+            width: 130px;
+            height: 130px;
+            border: 3px solid var(--border-pink);
+            box-shadow: 0 0 15px var(--border-pink);
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .avatar-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(120%) hue-rotate(15deg);
+        }
+
+        .profile-name {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            color: var(--text-pink);
+            text-align: center;
+        }
+
+        /* Skills List */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .skill-badge {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--border-neon);
+            color: var(--text-main);
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            font-family: 'VT323', monospace;
+            letter-spacing: 1px;
+        }
+
+        /* Status Bar / Clock */
+        .status-content {
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+        }
+
+        .status-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #00ff00;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+
+        /* Projects */
+        .project-item {
+            border-bottom: 1px dashed var(--text-muted);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .project-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .project-title {
+            color: var(--accent-yellow);
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .project-title:hover {
+            color: var(--border-pink);
+        }
+
+        /* Contact Links */
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .cyber-link {
+            display: block;
+            background: rgba(255, 0, 127, 0.1);
+            border: 1px solid var(--border-pink);
+            color: var(--text-pink);
+            text-decoration: none;
+            padding: 8px 12px;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .cyber-link:hover {
+            background: var(--border-pink);
+            color: #fff;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-family: 'VT323', monospace;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Custom Retro Popup Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: var(--panel-bg);
+            border: 3px solid var(--border-pink);
+            width: 400px;
+            max-width: 90%;
+            padding: 20px;
+            box-shadow: 0 0 20px var(--border-pink);
+        }
+
+        .modal-header {
+            background: var(--border-pink);
+            color: #fff;
+            padding: 5px 10px;
+            font-family: 'VT323', monospace;
+            display: flex;
+            justify-content: space-between;
+            margin: -20px -20px 15px -20px;
+        }
+
+        .close-modal {
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">★ CYBER_DEV.exe v2.0</div>
+            <div class="controls">
+                <button class="retro-btn" onclick="toggleTheme()">[ MATRIX MODE ]</button>
+                <button class="retro-btn" onclick="playAudioEffect()">[ SOUND FX ]</button>
+            </div>
+        </header>
+
+        <!-- Bento Grid Container -->
+        <div class="bento-grid">
+
+            <!-- 1. Hero Box -->
+            <div class="bento-box box-hero">
+                <div class="win-header">
+                    <span>welcome.txt</span>
+                    <div class="win-buttons"><span>_</span><span>□</span><span>×</span></div>
+                </div>
+                <h1>HALO, SAYA WEB DEVELOPER</h1>
+                <p>Membangun antarmuka web futuristik berkecepatan tinggi dengan sentuhan estetika masa lalu (Y2K / Retro Cyberpunk). Bersih secara kode, liar secara visual.</p>
+                <div>
+                    <span class="tag-y2k">#HTML5</span>
+                    <span class="tag-y2k">#CSS3_GRID</span>
+                    <span class="tag-y2k">#JS_ES6</span>
+                    <span class="tag-y2k">#UI_UX</span>
+                </div>
+            </div>
+
+            <!-- 2. Profile Frame Box -->
+            <div class="bento-box box-profile">
+                <div class="win-header" style="width: 100%;">
+                    <span>avatar.sys</span>
+                    <div class="win-buttons"><span>_</span><span>□</span><span>×</span></div>
+                </div>
+                <div class="avatar-frame">
+                    <!-- Placeholder Avatar Y2K Style -->
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80" alt="Avatar">
+                </div>
+                <div class="profile-name">&lt;Dev_Master /&gt;</div>
+            </div>
+
+            <!-- 3. Tech Stack Box -->
+            <div class="bento-box box-skills">
+                <div class="win-header">
+                    <span>skills_database.db</span>
+                    <div class="win-buttons"><span>_</span><span>□</span><span>×</span></div>
+                </div>
+                <p style="margin-bottom: 10px; font-size: 0.95rem; color: var(--text-muted);">Senjata & Framework pilihan:</p>
+                <div class="skills-grid">
+                    <span class="skill-badge">HTML5 Semantik</span>
+                    <span class="skill-badge">CSS Grid & Flex</span>
+                    <span class="skill-badge">JavaScript (ES6+)</span>
+                    <span class="skill-badge">Tailwind CSS</span>
+                    <span class="skill-badge">Git & GitHub</span>
+                    <span class="skill-badge">Responsive Design</span>
+                </div>
+            </div>
+
+            <!-- 4. Status & Time Box -->
+            <div class="bento-box box-status">
+                <div class="win-header">
+                    <span>system_status.log</span>
+                    <div class="win-buttons"><span>_</span><span>□</span><span>×</span></div>
+                </div>
+                <div class="status-content">
+                    <p><span class="status-dot"></span> STATUS: Ready for Freelance</p>
+                    <p style="margin-top: 8px;">🕒 LOCAL TIME: <span id="live-clock">00:00:00</span></p>
+                </div>
+            </div>
+
+            <!-- 5. Projects Box -->
+            <div class="bento-box box-projects">
+                <div class="win-header">
+                    <span>portfolio_archive/</span>
+                    <div class="win-buttons"><span>_</span><span>□</span><span>×</span></div>
+                </div>
+                <div class="project-item">
+                    <span class="project-title" onclick="openModal('Neon E-Commerce', 'Platform toko online dengan desain cyberpunk neon, keranjang belanja interaktif, dan animasi retro.')">01. Neon E-Commerce Dashboard</span>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Sistem manajemen produk dengan tema warna gelap dan neon menyala.</p>
+                </div>
+                <div class="project-item" style="margin-top: 12px;">
+                    <span class="project-title" onclick="openModal('Retro Portfolio v1', 'Website portofolio pribadi pertama dengan layout Windows 95 yang dapat digeser (draggable).')">02. Retro Win95 Portfolio</span>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Portofolio interaktif yang meniru sistem operasi klasik.</p>
+                </div>
+            </div>
+
+            <!-- 6. Contact Box -->
+            <div class="bento-box box-contact">
+                <div class="win-header">
+                    <span>connect.net</span>
+                    <div class="win-buttons"><span>_</span><span>□</span><span>×</span></div>
+                </div>
+                <div class="contact-links">
+                    <a href="mailto:email@example.com" class="cyber-link">📧 Send Email</a>
+                    <a href="https://github.com" target="_blank" class="cyber-link">🐙 GitHub Profile</a>
+                    <a href="https://linkedin.com" target="_blank" class="cyber-link">💼 LinkedIn Network</a>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <p>&copy; 2026 // Y2K BENTO PROFILE. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Retro Modal Popup -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span id="modalTitle">Project Details</span>
+                <span class="close-modal" onclick="closeModalDirect()">[X]</span>
+            </div>
+            <p id="modalDesc" style="font-size: 1rem; line-height: 1.4; color: var(--text-main); margin-bottom: 15px;"></p>
+            <button class="retro-btn" onclick="closeModalDirect()" style="width: 100%;">TUTUP</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Interaktif -->
+    <script>
+        // 1. Live Retro Clock
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('live-clock').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. Theme Toggle (Matrix Mode)
+        function toggleTheme() {
+            document.body.classList.toggle('matrix-theme');
+        }
+
+        // 3. Sound FX (Simulasi menggunakan Web Audio API sederhana)
+        function playAudioEffect() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime); // Nada A4
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch(e) {
+                console.log("Audio not supported or blocked");
+            }
+        }
+
+        // 4. Modal Project Detail Handler
+        function openModal(title, desc) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModalDirect() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        function closeModal(e) {
+            if (e.target.id === 'modalOverlay') {
+                closeModalDirect();
+            }
+        }
+    </script>
+</body>
+</html>
